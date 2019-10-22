@@ -1,5 +1,4 @@
 rm(list=ls())
-
 library(stringr)
 library(tidyr)
 library(RSelenium)
@@ -24,10 +23,11 @@ cnames<-c("Total Shots",
           "Interceptions")
 
 ##ESCOLHENDOO DRIVER (NAVEGADOR)
-rdmd <- RSelenium::rsDriver(browser="firefox",port=4444L)
+rdmd <- RSelenium::rsDriver(browser="firefox",
+                            port=4444L)
 
 ###########################
-mainpage<-"https://www.whoscored.com/Teams/7334/Fixtures/Brazil-Ceara"
+mainpage <- "https://www.whoscored.com/Teams/7334/Fixtures/Brazil-Ceara"
 ###########################3
 
 ##CARREGANDO O CLIENTE PAR AUSAR O NAVAGADOR
@@ -38,7 +38,8 @@ rd$navigate(mainpage)
 ############ ESCLHER A PARTIDA ######## 
 ############ A LISTA MATCHES VAI DE 1 ATE 54 ###########
 ##escolha aqui a partida de acordo com a lista na página
-matches <- rd$findElements(using ="xpath",value="//*[contains(@class, 'result-1')]")
+matches <- rd$findElements(using ="xpath",
+                           value="//*[contains(@class, 'result-1')]")
 Sys.sleep(2)
 
 matches[[23]]$clickElement()
@@ -59,14 +60,13 @@ if(str_count(teste2)>5){
   time[1]<-str_sub(rd$getCurrentUrl()[[1]],year+5,Ce-2)
 }
 
-
-
-##shotsText <- rd$findElements(using ="xpath",value="//*[contains(@class, 'match-centre-stat-values')]")
 #obtendos elementos desejados na pagina
-allElements <- rd$findElements(using ="xpath",value="//*[contains(@class, 'match-centre-stat-values')]")
-allelements2 <- rd$findElements(using ="xpath",value="//*[contains(@class, 'toggle-stat-details')]")
+allElements <- rd$findElements(using ="xpath",
+                               value="//*[contains(@class, 'match-centre-stat-values')]")
+allelements2 <- rd$findElements(using ="xpath",
+                                value="//*[contains(@class, 'toggle-stat-details')]")
 
-#pega do os dados desejados
+#
 ind<-c(2,4,6,7)
 dados<-data.frame(x1=numeric(50),
                   x2=numeric(50),
@@ -104,7 +104,6 @@ dados <- dados[-c(1,2,8,11,16,21,26,33,36),]
 dados1<-c(dados[,1],dados[,2],dados[,3],dados[,4])
 dados1<-data.frame(cnames,dados1[dados1!=""])
 colnames(dados1)[2]="value"
-dados1<-separate(dados1,col = "value",into = c(time[1],time[2]))
-dd<-tidyr::gather(dados1,Value,key =time ,-cnames)
-dd <-(spread(dd,cnames,Value))
-View(dd)
+dados1<-separate(dados1, col = "value", into = c(time[1],time[2]))
+dd<-tidyr::gather(dados1, Value, key = time , -cnames)
+dd <- spread(dd, cnames, Value)
